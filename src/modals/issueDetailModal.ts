@@ -1,5 +1,5 @@
 import { Modal } from "obsidian"
-import { IJiraIssue, IJiraUser } from "../interfaces/issueInterfaces"
+import { IJiraIssue, IJiraSprint, IJiraUser } from "../interfaces/issueInterfaces"
 import { ObsidianApp } from "../main"
 import RC, { JIRA_STATUS_COLOR_MAP, JIRA_STATUS_COLOR_MAP_BY_NAME } from "../rendering/renderingCommon"
 
@@ -137,6 +137,9 @@ export class IssueDetailModal extends Modal {
         if (this._issue.fields.fixVersions?.length > 0) {
             this.renderFixVersions(sidebar)
         }
+
+        // Sprints
+        this.renderSprints(sidebar)
 
         // Time Tracking
         if (this._issue.fields.timeestimate || this._issue.fields.timespent) {
@@ -280,6 +283,67 @@ export class IssueDetailModal extends Modal {
             progressBar.createDiv({
                 cls: 'jira-modal-progress-fill',
                 attr: { style: `width: ${percent}%` }
+            })
+        }
+    }
+
+    private parseSprintString(sprintStr: string): { id: number, name: string, state: string } | null {
+        // Parse Jira Server sprint format: "com.atlassian.greenhopper.service.sprint.Sprint@...[id=...,name=...,state=...]"
+        const idMatch = sprintStr.match(/id=(\d+)/)
+        const nameMatch = sprintStr.match(/name=([^,\]]+)/)
+        const stateMatch = sprintStr.match(/state=([^,\]]+)/)
+        if (nameMatch) {
+            return {
+                id: idMatch ? parseInt(idMatch[1], 10) : 0,
+                name: nameMatch[1],
+                state: (stateMatch?.[1] || '').toLowerCase()
+            }
+        }
+        return null
+    }
+
+    private renderSprints(container: HTMLElement): void {
+        // Get sprint field ID from account cache
+        const sprintFieldId = this._issue.account?.cache?.customFieldsNameToId?.['Sprint']
+        if (!sprintFieldId) return
+
+        const sprintsRaw = this._issue.fields[`customfield_${sprintFieldId}`]
+        if (!sprintsRaw?.length) return
+
+        // Parse sprints - handle both object format (Cloud) and string format (Server)
+        const sprints: { id: number, name: string, state: string }[] = []
+        for (const sprint of sprintsRaw) {
+            if (typeof sprint === 'string') {
+                const parsed = this.parseSprintString(sprint)
+                if (parsed) sprints.push(parsed)
+            } else if (sprint.name) {
+                sprints.push({ id: sprint.id || 0, name: sprint.name, state: sprint.state || '' })
+            }
+        }
+
+        if (!sprints.length) return
+
+        const field = container.createDiv({ cls: 'jira-modal-field' })
+        field.createDiv({ cls: 'jira-modal-field-label', text: 'Sprints' })
+
+        const sprintsEl = field.createDiv({ cls: 'jira-modal-sprints' })
+
+        // Sort: active first, then by id descending (newer sprints first)
+        sprints.sort((a, b) => {
+            if (a.state === 'active' && b.state !== 'active') return -1
+            if (a.state !== 'active' && b.state === 'active') return 1
+            return b.id - a.id  // Newer sprints (higher id) first
+        })
+
+        for (const sprint of sprints) {
+            const stateClass = sprint.state === 'active'
+                ? 'jira-modal-sprint-active'
+                : 'jira-modal-sprint-closed'
+
+            createSpan({
+                cls: `jira-modal-sprint-name ${stateClass}`,
+                text: sprint.name,
+                parent: sprintsEl
             })
         }
     }

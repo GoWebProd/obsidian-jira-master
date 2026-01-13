@@ -744,6 +744,30 @@ svg.svg-icon.jira-issue-hidden {
     text-decoration: none;
 }
 
+/* Sprint field styles */
+.jira-modal-sprints {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.jira-modal-sprint-name {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.jira-modal-sprint-active {
+    background-color: var(--color-green);
+    color: white;
+    font-weight: 500;
+}
+
+.jira-modal-sprint-closed {
+    background-color: var(--background-secondary);
+    color: var(--text-muted);
+}
+
 @media (max-width: 600px) {
     .jira-modal-content-wrapper {
         flex-direction: column;
