@@ -16,9 +16,9 @@ export const JIRA_STATUS_COLOR_MAP: Record<string, string> = {
 }
 
 export const JIRA_STATUS_COLOR_MAP_BY_NAME: Record<string, string> = {
-    'New': 'is-dark',
-    'Planning': 'is-dark',
-    'To Do': 'is-dark',
+    'New': 'is-todo',
+    'Planning': 'is-todo',
+    'To Do': 'is-todo',
     'In Progress': 'is-info',
     'Code Review': 'is-info',
     'Review': 'is-info',
@@ -114,6 +114,15 @@ export default {
                 cls: 'fit-content',
                 attr: { src: issue.fields.issuetype.iconUrl, alt: issue.fields.issuetype.name },
                 title: issue.fields.issuetype.name,
+                parent: createSpan({ cls: `ji-tag ${this.getTheme()} ji-sm-tag`, parent: tagsRow })
+            })
+        }
+        // Priority icon
+        if (issue.fields.priority?.iconUrl) {
+            createEl('img', {
+                cls: 'fit-content ji-priority-icon',
+                attr: { src: issue.fields.priority.iconUrl, alt: issue.fields.priority.name },
+                title: issue.fields.priority.name,
                 parent: createSpan({ cls: `ji-tag ${this.getTheme()} ji-sm-tag`, parent: tagsRow })
             })
         }
