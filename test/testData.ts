@@ -1,6 +1,6 @@
 import { IJiraAutocompleteDataField } from "../src/interfaces/issueInterfaces"
 import { DEFAULT_RATE_LIMIT } from "../src/settings"
-import { EAuthenticationTypes } from "../src/interfaces/settingsInterfaces"
+import { EAuthenticationTypes, IPredefinedAssignee } from "../src/interfaces/settingsInterfaces"
 
 const kEmptyAccountCache = {
     customFieldsIdToName: {},
@@ -23,6 +23,7 @@ export const TestAccountOpen = {
     rateLimit: DEFAULT_RATE_LIMIT,
     cache: kEmptyAccountCache,
     predefinedLabels: [] as string[],
+    predefinedAssignees: [] as IPredefinedAssignee[],
 }
 
 export const TestAccountBasic = {
@@ -37,4 +38,5 @@ export const TestAccountBasic = {
     rateLimit: DEFAULT_RATE_LIMIT,
     cache: kEmptyAccountCache,
     predefinedLabels: [] as string[],
+    predefinedAssignees: [] as IPredefinedAssignee[],
 }

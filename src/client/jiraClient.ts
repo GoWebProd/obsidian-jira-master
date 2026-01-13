@@ -629,4 +629,105 @@ export default {
             }
         )
     },
+
+    async searchAssignableUsers(issueKey: string, query: string, options: { account?: IJiraIssueAccountSettings } = {}): Promise<IJiraUser[]> {
+        const queryParameters = new URLSearchParams({
+            issueKey: issueKey,
+            username: query,
+            maxResults: '20',
+        })
+        const response = await sendRequest(
+            {
+                method: 'GET',
+                path: `/user/assignable/search`,
+                queryParameters: queryParameters,
+                account: options.account || null,
+            }
+        )
+        // Response can be an array or an object with numeric keys (Jira Server quirk)
+        if (Array.isArray(response)) {
+            return response as IJiraUser[]
+        }
+        // Handle object with numeric keys like {"0": {...}, "1": {...}}
+        if (typeof response === 'object' && response !== null) {
+            const users: IJiraUser[] = []
+            for (const key of Object.keys(response)) {
+                if (/^\d+$/.test(key)) {
+                    users.push(response[key] as IJiraUser)
+                }
+            }
+            if (users.length > 0) {
+                return users
+            }
+        }
+        return []
+    },
+
+    async updateIssueAssignee(issueKey: string, userNameOrAccountId: string | null, options: { account?: IJiraIssueAccountSettings } = {}): Promise<void> {
+        // Jira Server uses "name", Jira Cloud uses "accountId"
+        // Try to detect which one to use based on the value format
+        let assigneeField: Record<string, string> | null = null
+        if (userNameOrAccountId) {
+            // accountId is typically a long alphanumeric string, name is usually email-like
+            if (userNameOrAccountId.includes('@') || !userNameOrAccountId.match(/^[0-9a-f]{24}$/)) {
+                assigneeField = { name: userNameOrAccountId }
+            } else {
+                assigneeField = { accountId: userNameOrAccountId }
+            }
+        }
+        const body = {
+            fields: {
+                assignee: assigneeField
+            }
+        }
+        console.log('JiraIssue: updateIssueAssignee request:', issueKey, JSON.stringify(body, null, 2))
+        await sendRequest(
+            {
+                method: 'PUT',
+                path: `/issue/${issueKey}`,
+                account: options.account || null,
+                body: body
+            }
+        )
+    },
+
+    async searchUsers(query: string, options: { account?: IJiraIssueAccountSettings } = {}): Promise<IJiraUser[]> {
+        // Use /user/picker endpoint which is more universally available
+        const queryParameters = new URLSearchParams({
+            query: query,
+            maxResults: '20',
+            showAvatar: 'true',
+        })
+        const response = await sendRequest(
+            {
+                method: 'GET',
+                path: `/user/picker`,
+                queryParameters: queryParameters,
+                account: options.account || null,
+            }
+        )
+        // /user/picker returns { users: [...] } structure
+        let users: IJiraUser[] = []
+        if (response.users && Array.isArray(response.users)) {
+            users = response.users as IJiraUser[]
+        } else if (Array.isArray(response)) {
+            users = response as IJiraUser[]
+        }
+        return users
+    },
+
+    async getUser(usernameOrKey: string, options: { account?: IJiraIssueAccountSettings } = {}): Promise<IJiraUser> {
+        const queryParameters = new URLSearchParams({
+            username: usernameOrKey,
+        })
+        const response = await sendRequest(
+            {
+                method: 'GET',
+                path: `/user`,
+                queryParameters: queryParameters,
+                account: options.account || null,
+            }
+        )
+        return response as IJiraUser
+    },
 }

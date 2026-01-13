@@ -67,6 +67,7 @@ export const DEFAULT_ACCOUNT: IJiraIssueAccountSettings = {
         },
     },
     predefinedLabels: [],
+    predefinedAssignees: [],
 }
 
 function deepCopy(obj: any): any {
@@ -109,6 +110,7 @@ export class JiraIssueSettingTab extends PluginSettingTab {
                         use2025Api: false,
                         rateLimit: DEFAULT_RATE_LIMIT,
                         predefinedLabels: [],
+                        predefinedAssignees: [],
                     }
                 ]
             } else {
@@ -466,6 +468,114 @@ export class JiraIssueSettingTab extends PluginSettingTab {
                         newAccount.predefinedLabels.push(labelName)
                         this.displayModifyAccountPage(prevAccount, newAccount)
                     }
+                }))
+
+        // Predefined Assignees section
+        containerEl.createEl('h3', { text: 'Predefined Assignees' })
+        containerEl.createEl('p', { text: 'Users available in the context menu for quick assignment. Use Account ID from Jira user profile.', cls: 'setting-item-description' })
+
+        if (!newAccount.predefinedAssignees) {
+            newAccount.predefinedAssignees = []
+        }
+        for (let i = 0; i < newAccount.predefinedAssignees.length; i++) {
+            const assignee = newAccount.predefinedAssignees[i]
+            new Setting(containerEl)
+                .setName(assignee.displayName)
+                .setDesc(`ID: ${assignee.accountId}`)
+                .addExtraButton(button => button
+                    .setIcon('trash')
+                    .setTooltip('Remove assignee')
+                    .onClick(async () => {
+                        newAccount.predefinedAssignees.splice(i, 1)
+                        this.displayModifyAccountPage(prevAccount, newAccount)
+                    }))
+        }
+
+        // Search for users
+        let searchInput: TextComponent = null
+        const searchResultsContainer = containerEl.createDiv({ cls: 'jira-assignee-search-results' })
+
+        new Setting(containerEl)
+            .setName('Search users')
+            .setDesc('Search by name or email to add assignees')
+            .addText(text => {
+                searchInput = text
+                text.setPlaceholder('Type to search...')
+            })
+            .addButton(button => button
+                .setButtonText('Search')
+                .onClick(async () => {
+                    const query = searchInput.getValue().trim()
+                    if (query.length < 2) {
+                        new Notice('Enter at least 2 characters to search')
+                        return
+                    }
+                    button.setDisabled(true)
+                    button.setButtonText('Searching...')
+                    searchResultsContainer.empty()
+
+                    try {
+                        const users = await JiraClient.searchUsers(query, { account: newAccount })
+                        if (users.length === 0) {
+                            searchResultsContainer.createEl('p', { text: 'No users found', cls: 'setting-item-description' })
+                        } else {
+                            for (const user of users) {
+                                // Jira Server uses "name", Jira Cloud uses "accountId"
+                                const accountId = user.accountId || user.name || user.key
+                                const isAlreadyAdded = newAccount.predefinedAssignees.some(a => a.accountId === accountId)
+                                // /user/picker returns html field with email, parse it
+                                const emailMatch = (user as any).html?.match(/\(([^)]+@[^)]+)\)/)
+                                const email = user.emailAddress || (emailMatch ? emailMatch[1] : null)
+                                // /user/picker with showAvatar=true returns avatarUrl (singular)
+                                const avatarUrl = (user as any).avatarUrl || user.avatarUrls?.['32x32'] || user.avatarUrls?.['24x24']
+
+                                const userRow = searchResultsContainer.createDiv({ cls: 'jira-user-search-result' })
+
+                                // Avatar: use image if available, otherwise show initials placeholder
+                                if (avatarUrl) {
+                                    userRow.createEl('img', { cls: 'jira-user-avatar', attr: { src: avatarUrl, alt: user.displayName } })
+                                } else {
+                                    const initials = user.displayName
+                                        .split(' ')
+                                        .map(n => n[0])
+                                        .slice(0, 2)
+                                        .join('')
+                                        .toUpperCase()
+                                    userRow.createDiv({ cls: 'jira-user-avatar-placeholder', text: initials })
+                                }
+
+                                // User info
+                                const userInfo = userRow.createDiv({ cls: 'jira-user-info' })
+                                userInfo.createEl('div', { text: user.displayName, cls: 'jira-user-name' })
+                                if (email) {
+                                    userInfo.createEl('div', { text: email, cls: 'jira-user-email' })
+                                }
+
+                                // Add button
+                                const addBtn = userRow.createEl('button', {
+                                    text: isAlreadyAdded ? 'Added' : 'Add',
+                                    cls: isAlreadyAdded ? 'mod-muted' : ''
+                                })
+                                if (isAlreadyAdded) {
+                                    addBtn.disabled = true
+                                } else {
+                                    addBtn.addEventListener('click', async () => {
+                                        newAccount.predefinedAssignees.push({
+                                            accountId: accountId,
+                                            displayName: user.displayName
+                                        })
+                                        this.displayModifyAccountPage(prevAccount, newAccount)
+                                    })
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.error('JiraIssue: User search failed', e)
+                        searchResultsContainer.createEl('p', { text: `Search failed: ${e.message}`, cls: 'setting-item-description' })
+                    }
+
+                    button.setButtonText('Search')
+                    button.setDisabled(false)
                 }))
 
         new Setting(containerEl)

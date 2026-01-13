@@ -6,6 +6,11 @@ export interface IRateLimitSettings {
     concurrent: number   // Number of concurrent requests (1 = sequential)
 }
 
+export interface IPredefinedAssignee {
+    accountId: string      // Jira accountId for API calls
+    displayName: string    // Display name shown in UI
+}
+
 export enum EAuthenticationTypes {
     OPEN = 'OPEN',
     BASIC = 'BASIC',
@@ -79,6 +84,7 @@ export interface IJiraIssueAccountSettings {
         }
     }
     predefinedLabels: string[]
+    predefinedAssignees: IPredefinedAssignee[]
 }
 
 export enum ESearchResultsRenderingTypes {

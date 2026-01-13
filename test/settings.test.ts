@@ -77,6 +77,7 @@ describe('Settings', () => {
                 priority: 1,
                 rateLimit: DEFAULT_ACCOUNT.rateLimit,
                 predefinedLabels: DEFAULT_ACCOUNT.predefinedLabels,
+                predefinedAssignees: DEFAULT_ACCOUNT.predefinedAssignees,
                 "cache": {
                     "customFieldsIdToName": {},
                     "customFieldsNameToId": {},

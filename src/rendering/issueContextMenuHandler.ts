@@ -1,5 +1,6 @@
 import { Menu } from "obsidian"
 import { IJiraIssue } from "../interfaces/issueInterfaces"
+import { AssigneeModal } from "../modals/assigneeModal"
 import { LabelManagementModal } from "../modals/labelManagementModal"
 import { PriorityModal } from "../modals/priorityModal"
 
@@ -43,6 +44,14 @@ export function attachIssueContextMenuHandler(
             .setIcon('signal')
             .onClick(() => {
                 new PriorityModal(issue, onIssueUpdated).open()
+            })
+        )
+
+        menu.addItem(item => item
+            .setTitle('Change assignee')
+            .setIcon('user')
+            .onClick(() => {
+                new AssigneeModal(issue, onIssueUpdated).open()
             })
         )
 

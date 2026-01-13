@@ -96,6 +96,7 @@ export interface IJiraUser {
     displayName: string
     name: string
     key: string
+    accountId?: string  // Jira Cloud uses accountId instead of name/key
     emailAddress: string
     self: string
     avatarUrls: {
