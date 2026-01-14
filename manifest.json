@@ -1,11 +1,11 @@
 {
-  "id": "obsidian-jira-issue",
-  "name": "Jira Issue",
-  "version": "1.58.1",
+  "id": "obsidian-jira-master",
+  "name": "Jira Master",
+  "version": "2.0.0",
   "minAppVersion": "0.12.0",
   "description": "This plugin allows you to track the progress of Atlassian Jira issues from your Obsidian notes.",
-  "author": "marc0l92",
-  "authorUrl": "https://github.com/marc0l92",
-  "fundingUrl": "https://ko-fi.com/marc0l92",
+  "author": "GoWebProd",
+  "authorUrl": "https://github.com/GoWebProd",
+  "fundingUrl": "",
   "isDesktopOnly": false
 }
