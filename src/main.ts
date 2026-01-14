@@ -6,6 +6,7 @@ import { ColumnsSuggest } from './suggestions/columnsSuggest'
 import { CountFenceRenderer } from './rendering/countFenceRenderer'
 import { InlineIssueRenderer } from './rendering/inlineIssueRenderer'
 import { IssueFenceRenderer } from './rendering/issueFenceRenderer'
+import { KanbanFenceRenderer } from './rendering/kanbanFenceRenderer'
 import { SearchFenceRenderer } from './rendering/searchFenceRenderer'
 import { SearchWizardModal } from './modals/searchWizardModal'
 import { ViewPluginManager } from './rendering/inlineIssueViewPlugin'
@@ -38,6 +39,7 @@ export default class JiraIssuePlugin extends Plugin {
         this.registerMarkdownCodeBlockProcessor('jira-issue', IssueFenceRenderer)
         this.registerMarkdownCodeBlockProcessor('jira-search', SearchFenceRenderer)
         this.registerMarkdownCodeBlockProcessor('jira-count', CountFenceRenderer)
+        this.registerMarkdownCodeBlockProcessor('jira-kanban', KanbanFenceRenderer)
         // Suggestion menu for columns inside jira-search fence
         this.app.workspace.onLayoutReady(() => {
             this._columnsSuggest = new ColumnsSuggest(this.app)
@@ -92,6 +94,13 @@ export default class JiraIssuePlugin extends Plugin {
             name: 'Insert count template',
             editorCallback: (editor: Editor, view: MarkdownView) => {
                 editor.replaceRange('```jira-count\n\n```', editor.getCursor())
+            }
+        })
+        this.addCommand({
+            id: 'obsidian-jira-kanban-template-fence',
+            name: 'Insert kanban template',
+            editorCallback: (editor: Editor, view: MarkdownView) => {
+                editor.replaceRange('```jira-kanban\nquery: project = MYPROJ AND sprint in openSprints()\n\ncolumn: To Do\n  statuses: Open, To Do, Backlog\n\ncolumn: In Progress\n  statuses: In Progress, In Review\n\ncolumn: Done\n  statuses: Done, Closed\n\nfields: KEY, SUMMARY, TYPE, PRIORITY, ASSIGNEE\n```', editor.getCursor())
             }
         })
     }

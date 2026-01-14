@@ -1075,3 +1075,409 @@ svg.svg-icon.jira-issue-hidden {
     font-style: italic;
     padding: 12px;
 }
+
+/* ===== Kanban Board Styles ===== */
+
+/* Loading State */
+.ji-kanban-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    color: var(--text-muted);
+}
+
+/* Board Container */
+.ji-kanban-board {
+    width: 100%;
+    overflow-x: auto;
+    padding: 8px 0;
+}
+
+/* Columns Container - Flexbox horizontal layout */
+.ji-kanban-columns {
+    display: flex;
+    gap: 12px;
+    min-height: 200px;
+    padding-bottom: 8px;
+}
+
+/* Individual Column */
+.ji-kanban-column {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+    background-color: var(--background-secondary);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ji-kanban-column-unmapped {
+    background-color: var(--background-modifier-error-hover, #f5d0d0);
+    opacity: 0.85;
+}
+
+.ji-kanban-board.is-dark .ji-kanban-column-unmapped {
+    background-color: rgba(222, 53, 11, 0.15);
+}
+
+/* Column Header */
+.ji-kanban-column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid var(--background-modifier-border);
+    font-weight: 600;
+}
+
+.ji-kanban-column-title {
+    font-size: 0.9em;
+    color: var(--text-normal);
+}
+
+.ji-kanban-column-count {
+    font-size: 0.8em;
+    background-color: var(--background-modifier-border);
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: var(--text-muted);
+}
+
+.ji-kanban-column-count.ji-wip-exceeded {
+    background-color: #de350b;
+    color: white;
+}
+
+/* Column Stats Container */
+.ji-kanban-column-stats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Estimation Display */
+.ji-kanban-column-estimation {
+    font-size: 0.75em;
+    color: var(--text-muted);
+    font-weight: normal;
+}
+
+/* Cards Container */
+.ji-kanban-column-cards {
+    flex: 1;
+    padding: 8px;
+    overflow-y: auto;
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Individual Card */
+.ji-kanban-card {
+    background-color: var(--background-primary);
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.15s ease;
+}
+
+.ji-kanban-card:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Header */
+.ji-kanban-card-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.ji-kanban-card-type-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.ji-kanban-card-key {
+    font-size: 0.85em;
+    font-weight: 500;
+    color: var(--text-accent);
+    text-decoration: none;
+    flex-grow: 1;
+}
+
+.ji-kanban-card-key:hover {
+    text-decoration: underline;
+}
+
+.ji-kanban-card-priority-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+/* Card Summary */
+.ji-kanban-card-summary {
+    font-size: 0.85em;
+    line-height: 1.4;
+    color: var(--text-normal);
+    margin-bottom: 8px;
+    /* Limit to 3 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Card Status */
+.ji-kanban-card-status {
+    margin-bottom: 6px;
+}
+
+.ji-kanban-card-status .ji-tag {
+    font-size: 0.7em;
+    padding: 2px 6px;
+}
+
+/* Card Footer */
+.ji-kanban-card-footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75em;
+}
+
+.ji-kanban-card-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.ji-kanban-card-assignee {
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ji-kanban-card-assignee.ji-unassigned {
+    font-style: italic;
+}
+
+/* Card Labels */
+.ji-kanban-card-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.ji-kanban-card-label {
+    font-size: 0.65em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--background-modifier-border);
+    color: var(--text-muted);
+}
+
+/* Card Due Date */
+.ji-kanban-card-due-date {
+    font-size: 0.75em;
+    margin-top: 6px;
+}
+
+.ji-kanban-due-normal {
+    color: var(--text-muted);
+}
+
+.ji-kanban-due-overdue {
+    color: #de350b;
+    font-weight: 500;
+}
+
+/* Board Footer */
+.ji-kanban-footer {
+    margin-top: 8px;
+    font-size: x-small;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 4px;
+}
+
+.ji-kanban-footer a {
+    color: var(--text-muted);
+}
+
+.ji-kanban-footer button {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+    box-shadow: none;
+    height: 1.5em;
+    cursor: pointer;
+    font-size: x-small;
+    vertical-align: middle;
+    margin-left: 3px;
+}
+
+.ji-kanban-footer button:hover {
+    opacity: 0.8;
+}
+
+.ji-kanban-footer button > svg {
+    height: 1.5em;
+    width: 1.5em;
+    fill: none;
+    stroke: currentColor;
+}
+
+/* Dark theme adjustments */
+.ji-kanban-board.is-dark .ji-kanban-column {
+    background-color: var(--background-secondary-alt, #1a1a1a);
+}
+
+.ji-kanban-board.is-dark .ji-kanban-card {
+    background-color: var(--background-primary-alt, #262626);
+}
+
+/* Responsive: stack columns vertically on narrow views */
+@media (max-width: 600px) {
+    .ji-kanban-columns {
+        flex-direction: column;
+    }
+
+    .ji-kanban-column {
+        flex: 0 0 auto;
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .ji-kanban-column-cards {
+        max-height: 300px;
+    }
+}
+
+/* ===== Swimlane Styles ===== */
+
+/* Swimlanes Container */
+.ji-kanban-swimlanes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Individual Swimlane */
+.ji-kanban-swimlane {
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Swimlane Header */
+.ji-kanban-swimlane-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background-color: var(--background-secondary);
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.15s ease;
+}
+
+.ji-kanban-swimlane-header:hover {
+    background-color: var(--background-modifier-hover);
+}
+
+.ji-kanban-swimlane-toggle {
+    font-size: 0.8em;
+    color: var(--text-muted);
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.ji-kanban-swimlane-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.ji-kanban-swimlane-name {
+    font-weight: 600;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ji-kanban-swimlane-count {
+    color: var(--text-muted);
+    font-size: 0.85em;
+    flex-shrink: 0;
+}
+
+.ji-kanban-swimlane-estimation {
+    color: var(--text-muted);
+    font-size: 0.85em;
+    flex-shrink: 0;
+    margin-left: 4px;
+}
+
+/* Columns inside Swimlane */
+.ji-kanban-swimlane .ji-kanban-columns {
+    padding: 8px;
+    background-color: var(--background-primary);
+    overflow-x: auto;
+}
+
+.ji-kanban-swimlane .ji-kanban-column {
+    flex: 0 0 240px;
+    min-width: 240px;
+    max-width: 240px;
+}
+
+.ji-kanban-swimlane .ji-kanban-column-cards {
+    max-height: 350px;
+}
+
+/* Collapsed Swimlane */
+.ji-kanban-swimlane.collapsed .ji-kanban-columns {
+    display: none;
+}
+
+/* Dark theme adjustments for swimlanes */
+.ji-kanban-board.is-dark .ji-kanban-swimlane {
+    border-color: var(--background-modifier-border);
+}
+
+.ji-kanban-board.is-dark .ji-kanban-swimlane-header {
+    background-color: var(--background-secondary-alt, #1a1a1a);
+}
+
+.ji-kanban-board.is-dark .ji-kanban-swimlane .ji-kanban-columns {
+    background-color: var(--background-primary-alt, #262626);
+}
+
+/* Responsive swimlanes */
+@media (max-width: 600px) {
+    .ji-kanban-swimlane .ji-kanban-columns {
+        flex-direction: column;
+    }
+
+    .ji-kanban-swimlane .ji-kanban-column {
+        flex: 0 0 auto;
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .ji-kanban-swimlane .ji-kanban-column-cards {
+        max-height: 200px;
+    }
+}
