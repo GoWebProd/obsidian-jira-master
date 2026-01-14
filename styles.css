@@ -1481,3 +1481,208 @@ svg.svg-icon.jira-issue-hidden {
         max-height: 200px;
     }
 }
+
+/* ===== UI Enhancement: Avatar Placeholder ===== */
+.ji-avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+/* ===== UI Enhancement: Priority Color Classes ===== */
+.ji-priority-highest { color: #f48771 !important; }
+.ji-priority-high { color: #fc9403 !important; }
+.ji-priority-medium { color: #4ec9b0 !important; }
+.ji-priority-low { color: #2684ff !important; }
+.ji-priority-lowest { color: #6b778c !important; }
+
+/* ===== UI Enhancement: Kanban WIP Warning Border ===== */
+.ji-kanban-column.ji-wip-exceeded {
+    border: 2px solid #f48771;
+}
+
+.ji-kanban-column.ji-wip-exceeded .ji-kanban-column-header {
+    border-bottom-color: #f48771;
+}
+
+/* ===== UI Enhancement: Card Hover Effect ===== */
+.ji-kanban-card {
+    transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+    border: 1px solid transparent;
+}
+
+.ji-kanban-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+    border-color: var(--interactive-accent);
+}
+
+/* ===== UI Enhancement: Green Estimation ===== */
+.ji-kanban-column-estimation {
+    color: #4ec9b0;
+    font-weight: 500;
+}
+
+/* ===== UI Enhancement: Modal Sidebar ===== */
+.jira-modal-sidebar {
+    background: var(--background-secondary-alt, var(--background-secondary));
+    padding: 20px;
+    border-left: 1px solid var(--background-modifier-border);
+    border-radius: 0 8px 8px 0;
+}
+
+/* ===== UI Enhancement: Section Title Typography ===== */
+.jira-modal-section h3,
+.jira-modal-field-label,
+.jira-assignee-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+/* ===== UI Enhancement: Sprint Item with Colored Border ===== */
+.jira-modal-sprint-item {
+    background: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
+    border-left: 3px solid #4ec9b0;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+}
+
+.jira-modal-sprint-item .jira-modal-sprint-name {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.jira-modal-sprint-item .jira-modal-sprint-state {
+    font-size: 10px;
+    color: #4ec9b0;
+    text-transform: uppercase;
+}
+
+.jira-modal-sprint-item.is-closed {
+    border-left-color: var(--text-muted);
+    opacity: 0.8;
+}
+
+.jira-modal-sprint-item.is-closed .jira-modal-sprint-state {
+    color: var(--text-muted);
+}
+
+/* ===== UI Enhancement: Linked Issues as Cards ===== */
+.jira-modal-linked-issue {
+    background: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: border-color 0.15s ease;
+}
+
+.jira-modal-linked-issue:hover {
+    border-color: var(--interactive-accent);
+}
+
+.jira-modal-linked-issue .jira-modal-link-type {
+    font-size: 11px;
+    color: var(--text-muted);
+    min-width: 70px;
+}
+
+.jira-modal-linked-issue .jira-modal-link-key {
+    color: var(--text-accent);
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.jira-modal-linked-issue .jira-modal-link-summary {
+    font-size: 12px;
+    color: var(--text-normal);
+    flex: 1;
+}
+
+/* ===== UI Enhancement: Assignee Modal ===== */
+.jira-assignee-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.jira-assignee-item:hover {
+    background: var(--background-secondary);
+    border-color: var(--interactive-accent);
+}
+
+.jira-assignee-item.is-selected {
+    background: rgba(14, 99, 156, 0.15);
+    border-color: var(--interactive-accent);
+}
+
+.jira-assignee-item.is-current {
+    border-color: #4ec9b0;
+}
+
+.jira-assignee-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.jira-assignee-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.jira-assignee-email {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.jira-assignee-current-badge {
+    background: #4ec9b0;
+    color: #1e1e1e;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* ===== UI Enhancement: Time Tracking ===== */
+.jira-modal-time-tracking {
+    background: var(--background-primary);
+    border-radius: 4px;
+    padding: 12px;
+}
+
+.jira-modal-time-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.jira-modal-time-percent {
+    text-align: center;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 6px;
+}

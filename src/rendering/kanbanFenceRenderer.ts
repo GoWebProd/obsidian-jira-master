@@ -3,7 +3,7 @@ import { toDefaultedIssue, IJiraSearchResults, IJiraIssue } from "../interfaces/
 import { ESearchColumnsTypes, ISearchColumn } from "../interfaces/settingsInterfaces"
 import JiraClient from "../client/jiraClient"
 import ObjectsCache from "../objectsCache"
-import RC, { JIRA_STATUS_COLOR_MAP, JIRA_STATUS_COLOR_MAP_BY_NAME } from "./renderingCommon"
+import RC, { JIRA_STATUS_COLOR_MAP, JIRA_STATUS_COLOR_MAP_BY_NAME, createAvatarPlaceholder, getPriorityColorClass } from "./renderingCommon"
 import { KanbanView, IKanbanColumn, EstimationType } from "../kanbanView"
 import { SettingsData } from "../settings"
 import { attachIssueClickHandler } from "./issueClickHandler"
@@ -82,10 +82,11 @@ function renderKanbanCard(
         attachIssueClickHandler(keyLink, issue)
     }
 
-    // Priority icon
+    // Priority icon with color class
     if (hasField(fields, ESearchColumnsTypes.PRIORITY) && issue.fields.priority?.iconUrl) {
+        const priorityColorClass = getPriorityColorClass(issue.fields.priority.name)
         createEl('img', {
-            cls: 'ji-kanban-card-priority-icon',
+            cls: `ji-kanban-card-priority-icon ${priorityColorClass}`,
             attr: { src: issue.fields.priority.iconUrl, alt: issue.fields.priority.name },
             title: issue.fields.priority.name,
             parent: headerRow
@@ -132,6 +133,11 @@ function renderKanbanCard(
                     title: issue.fields.assignee.displayName,
                     parent: footer
                 })
+            } else {
+                // No avatar image - use gradient placeholder
+                const placeholder = createAvatarPlaceholder(issue.fields.assignee.displayName, 20)
+                placeholder.addClass('ji-kanban-card-avatar')
+                footer.appendChild(placeholder)
             }
             createSpan({ cls: 'ji-kanban-card-assignee', text: issue.fields.assignee.displayName, parent: footer })
         } else {
@@ -421,13 +427,18 @@ function renderSwimlane(
     // Collapse toggle
     const toggle = createSpan({ cls: 'ji-kanban-swimlane-toggle', text: '▼', parent: header })
 
-    // Avatar (for user-based swimlanes)
+    // Avatar (for user-based swimlanes) - use gradient placeholder if no URL
     if (swimlane.avatarUrl) {
         createEl('img', {
             cls: 'ji-kanban-swimlane-avatar',
             attr: { src: swimlane.avatarUrl, alt: swimlane.name },
             parent: header
         })
+    } else if (swimlane.name && !swimlane.key.startsWith('no-')) {
+        // Use gradient placeholder for user-based swimlanes without avatar
+        const placeholder = createAvatarPlaceholder(swimlane.name, 24)
+        placeholder.addClass('ji-kanban-swimlane-avatar')
+        header.appendChild(placeholder)
     }
 
     // Name
@@ -491,7 +502,8 @@ function renderKanbanColumn(
     kanbanView: KanbanView,
     onIssueUpdated: (issue: IJiraIssue) => void
 ): HTMLElement {
-    const column = createDiv({ cls: 'ji-kanban-column' })
+    const isWipExceeded = columnData.column.wipLimit && columnData.issues.length > columnData.column.wipLimit
+    const column = createDiv({ cls: `ji-kanban-column ${isWipExceeded ? 'ji-wip-exceeded' : ''}` })
 
     // Column header
     const header = createDiv({ cls: 'ji-kanban-column-header' })
@@ -504,7 +516,6 @@ function renderKanbanColumn(
         ? `${columnData.issues.length}/${columnData.column.wipLimit}`
         : columnData.issues.length.toString()
 
-    const isWipExceeded = columnData.column.wipLimit && columnData.issues.length > columnData.column.wipLimit
     createSpan({
         cls: `ji-kanban-column-count ${isWipExceeded ? 'ji-wip-exceeded' : ''}`,
         text: countText,

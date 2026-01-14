@@ -1,7 +1,7 @@
 import { Modal } from "obsidian"
 import { IJiraIssue, IJiraSprint, IJiraUser } from "../interfaces/issueInterfaces"
 import { ObsidianApp } from "../main"
-import RC, { JIRA_STATUS_COLOR_MAP, JIRA_STATUS_COLOR_MAP_BY_NAME } from "../rendering/renderingCommon"
+import RC, { JIRA_STATUS_COLOR_MAP, JIRA_STATUS_COLOR_MAP_BY_NAME, createAvatarPlaceholder, getPriorityColorClass } from "../rendering/renderingCommon"
 
 export class IssueDetailModal extends Modal {
     private _issue: IJiraIssue
@@ -82,10 +82,12 @@ export class IssueDetailModal extends Modal {
         for (const link of this._issue.fields.issueLinks) {
             if (!link.inwardIssue) continue
 
-            const linkEl = section.createDiv({ cls: 'jira-modal-issue-link' })
+            // Use new card-style linked issue
+            const linkEl = section.createDiv({ cls: 'jira-modal-linked-issue' })
             createSpan({ text: link.type?.name || 'Related', cls: 'jira-modal-link-type', parent: linkEl })
             createEl('a', {
                 text: link.inwardIssue.key,
+                cls: 'jira-modal-link-key',
                 href: RC.issueUrl(this._issue.account, link.inwardIssue.key),
                 parent: linkEl
             })
@@ -168,10 +170,11 @@ export class IssueDetailModal extends Modal {
         field.createDiv({ cls: 'jira-modal-field-label', text: 'Priority' })
 
         const value = field.createDiv({ cls: 'jira-modal-field-value jira-modal-priority' })
+        const priorityColorClass = getPriorityColorClass(this._issue.fields.priority.name)
 
         if (this._issue.fields.priority.iconUrl) {
             createEl('img', {
-                cls: 'jira-modal-priority-icon',
+                cls: `jira-modal-priority-icon ${priorityColorClass}`,
                 attr: { src: this._issue.fields.priority.iconUrl, alt: this._issue.fields.priority.name },
                 parent: value
             })
@@ -193,6 +196,11 @@ export class IssueDetailModal extends Modal {
                     attr: { src: user.avatarUrls['24x24'], alt: user.displayName },
                     parent: userEl
                 })
+            } else {
+                // Use gradient avatar placeholder
+                const placeholder = createAvatarPlaceholder(user.displayName, 24)
+                placeholder.addClass('jira-modal-user-avatar')
+                userEl.appendChild(placeholder)
             }
             createSpan({ text: user.displayName, parent: userEl })
         } else {
@@ -264,17 +272,14 @@ export class IssueDetailModal extends Modal {
             return `${minutes}m`
         }
 
-        createDiv({
-            text: `Logged: ${formatTime(spent)}`,
-            parent: timeEl
-        })
+        // Time labels row
+        const labelsRow = timeEl.createDiv({ cls: 'jira-modal-time-labels' })
+        createSpan({ text: `Logged: ${formatTime(spent)}`, parent: labelsRow })
+        if (estimate > 0) {
+            createSpan({ text: `Remaining: ${formatTime(estimate)}`, parent: labelsRow })
+        }
 
         if (estimate > 0) {
-            createDiv({
-                text: `Remaining: ${formatTime(estimate)}`,
-                parent: timeEl
-            })
-
             // Progress bar
             const total = spent + estimate
             const percent = total > 0 ? Math.round((spent / total) * 100) : 0
@@ -283,6 +288,12 @@ export class IssueDetailModal extends Modal {
             progressBar.createDiv({
                 cls: 'jira-modal-progress-fill',
                 attr: { style: `width: ${percent}%` }
+            })
+
+            // Percentage label
+            timeEl.createDiv({
+                cls: 'jira-modal-time-percent',
+                text: `${percent}% complete`
             })
         }
     }
@@ -337,14 +348,22 @@ export class IssueDetailModal extends Modal {
 
         for (const sprint of sprints) {
             const stateClass = sprint.state === 'active'
-                ? 'jira-modal-sprint-active'
-                : 'jira-modal-sprint-closed'
+                ? ''
+                : 'is-closed'
 
+            const sprintItem = sprintsEl.createDiv({ cls: `jira-modal-sprint-item ${stateClass}` })
             createSpan({
-                cls: `jira-modal-sprint-name ${stateClass}`,
+                cls: 'jira-modal-sprint-name',
                 text: sprint.name,
-                parent: sprintsEl
+                parent: sprintItem
             })
+            if (sprint.state === 'active') {
+                createSpan({
+                    cls: 'jira-modal-sprint-state',
+                    text: 'Active',
+                    parent: sprintItem
+                })
+            }
         }
     }
 

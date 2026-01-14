@@ -4,11 +4,13 @@ import { IPredefinedAssignee } from "../interfaces/settingsInterfaces"
 import { ObsidianApp } from "../main"
 import JiraClient from "../client/jiraClient"
 import ObjectsCache from "../objectsCache"
+import { createAvatarPlaceholder } from "../rendering/renderingCommon"
 
 interface AssigneeOption {
     accountId: string
     displayName: string
     avatarUrl?: string
+    emailAddress?: string
     isFromSearch?: boolean
 }
 
@@ -90,6 +92,7 @@ export class AssigneeModal extends Modal {
                 accountId: user.accountId || user.key || user.name,
                 displayName: user.displayName,
                 avatarUrl: user.avatarUrls?.['24x24'],
+                emailAddress: user.emailAddress,
                 isFromSearch: true
             }))
         } catch (error) {
@@ -112,51 +115,54 @@ export class AssigneeModal extends Modal {
 
         const currentAssignee = this._issue.fields.assignee
 
+        // Quick Access section
+        this._resultsContainer.createEl('div', { text: 'Quick Access', cls: 'jira-assignee-section-label' })
+
         // Unassigned option
         const unassignedItem = this._resultsContainer.createDiv({
             cls: `jira-assignee-item${this._selectedAccountId === null ? ' is-selected' : ''}`
         })
-        const unassignedLabel = unassignedItem.createEl('label', { cls: 'jira-assignee-label' })
-        const unassignedRadio = unassignedLabel.createEl('input', {
-            type: 'radio',
-            attr: { name: 'assignee', value: '' }
-        }) as HTMLInputElement
-        if (this._selectedAccountId === null) {
-            unassignedRadio.checked = true
-        }
-        unassignedRadio.addEventListener('change', () => {
-            if (unassignedRadio.checked) {
-                this._selectedAccountId = null
-                this.updateSelection()
-            }
-        })
-        unassignedLabel.createSpan({ text: 'Unassigned' })
+
+        // Placeholder avatar for unassigned
+        const unassignedAvatar = unassignedItem.createDiv({ cls: 'jira-assignee-avatar jira-assignee-avatar-empty' })
+        unassignedAvatar.createSpan({ text: '?' })
+
+        const unassignedInfo = unassignedItem.createDiv({ cls: 'jira-assignee-info' })
+        unassignedInfo.createDiv({ cls: 'jira-assignee-name', text: 'Unassigned' })
+        unassignedInfo.createDiv({ cls: 'jira-assignee-email', text: 'Remove current assignee' })
+
         if (!currentAssignee) {
-            unassignedLabel.createSpan({ text: ' (current)', cls: 'jira-assignee-current-tag' })
+            unassignedItem.createSpan({ cls: 'jira-assignee-current-badge', text: 'Current' })
         }
 
-        // Separator
+        unassignedItem.addEventListener('click', () => {
+            this._selectedAccountId = null
+            this.updateSelection()
+        })
+
+        // Predefined assignees section
         if (this._predefinedAssignees.length > 0) {
             this._resultsContainer.createEl('div', { cls: 'jira-assignee-separator' })
-            this._resultsContainer.createEl('div', { text: 'Predefined:', cls: 'jira-assignee-section-title' })
+            this._resultsContainer.createEl('div', { text: 'Predefined Assignees', cls: 'jira-assignee-section-label' })
+
+            for (const assignee of this._predefinedAssignees) {
+                this.renderAssigneeOption(assignee, currentAssignee)
+            }
         }
 
-        // Predefined assignees
-        for (const assignee of this._predefinedAssignees) {
-            this.renderAssigneeOption(assignee, currentAssignee)
-        }
-
-        // Search results
+        // Search results section
         if (this._searchResults.length > 0) {
-            this._resultsContainer.createEl('div', { cls: 'jira-assignee-separator' })
-            this._resultsContainer.createEl('div', { text: 'Search results:', cls: 'jira-assignee-section-title' })
+            const filteredResults = this._searchResults.filter(
+                result => !this._predefinedAssignees.some(p => p.accountId === result.accountId)
+            )
 
-            for (const result of this._searchResults) {
-                // Skip if already in predefined
-                if (this._predefinedAssignees.some(p => p.accountId === result.accountId)) {
-                    continue
+            if (filteredResults.length > 0) {
+                this._resultsContainer.createEl('div', { cls: 'jira-assignee-separator' })
+                this._resultsContainer.createEl('div', { text: 'Search Results', cls: 'jira-assignee-section-label' })
+
+                for (const result of filteredResults) {
+                    this.renderAssigneeOption(result, currentAssignee)
                 }
-                this.renderAssigneeOption(result, currentAssignee)
             }
         }
     }
@@ -169,35 +175,35 @@ export class AssigneeModal extends Modal {
             cls: `jira-assignee-item${isSelected ? ' is-selected' : ''}${isCurrent ? ' is-current' : ''}`
         })
 
+        // Avatar - use gradient placeholder if no image URL
         if (assignee.avatarUrl) {
             item.createEl('img', {
                 cls: 'jira-assignee-avatar',
                 attr: { src: assignee.avatarUrl, alt: assignee.displayName }
             })
+        } else {
+            const placeholder = createAvatarPlaceholder(assignee.displayName, 32)
+            placeholder.addClass('jira-assignee-avatar')
+            item.appendChild(placeholder)
         }
 
-        const label = item.createEl('label', { cls: 'jira-assignee-label' })
-        const radio = label.createEl('input', {
-            type: 'radio',
-            attr: { name: 'assignee', value: assignee.accountId }
-        }) as HTMLInputElement
-
-        if (isSelected) {
-            radio.checked = true
+        // Info section with name and email
+        const info = item.createDiv({ cls: 'jira-assignee-info' })
+        info.createDiv({ cls: 'jira-assignee-name', text: assignee.displayName })
+        if (assignee.emailAddress) {
+            info.createDiv({ cls: 'jira-assignee-email', text: assignee.emailAddress })
         }
 
-        radio.addEventListener('change', () => {
-            if (radio.checked) {
-                this._selectedAccountId = assignee.accountId
-                this.updateSelection()
-            }
-        })
-
-        label.createSpan({ text: assignee.displayName })
-
+        // Current badge
         if (isCurrent) {
-            label.createSpan({ text: ' (current)', cls: 'jira-assignee-current-tag' })
+            item.createSpan({ cls: 'jira-assignee-current-badge', text: 'Current' })
         }
+
+        // Click handler
+        item.addEventListener('click', () => {
+            this._selectedAccountId = assignee.accountId
+            this.updateSelection()
+        })
     }
 
     private updateSelection(): void {
