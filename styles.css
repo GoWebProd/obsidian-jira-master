@@ -1875,3 +1875,246 @@ svg.svg-icon.jira-issue-hidden {
     font-style: italic;
     padding: 12px;
 }
+
+/* ===== Changelog Styles ===== */
+
+/* Loading State */
+.changelog-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    color: var(--text-muted);
+}
+
+/* Table cell styles */
+.jira-issue-container .changelog-time {
+    white-space: nowrap;
+    font-size: 0.9em;
+    color: var(--text-muted);
+}
+
+.jira-issue-container .changelog-issue-link {
+    font-weight: 500;
+    color: var(--text-accent);
+}
+
+.jira-issue-container .changelog-field {
+    font-weight: 500;
+}
+
+.jira-issue-container .changelog-from {
+    background-color: rgba(222, 53, 11, 0.05);
+}
+
+.jira-issue-container .changelog-to {
+    background-color: rgba(54, 179, 126, 0.05);
+}
+
+.jira-issue-container .table.is-dark .changelog-from {
+    background-color: rgba(222, 53, 11, 0.1);
+}
+
+.jira-issue-container .table.is-dark .changelog-to {
+    background-color: rgba(54, 179, 126, 0.1);
+}
+
+.jira-issue-container .changelog-empty {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Author cell */
+.jira-issue-container .changelog-author-cell {
+    min-width: 120px;
+}
+
+.jira-issue-container .changelog-author {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.jira-issue-container .changelog-author-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+}
+
+/* Footer */
+.jira-issue-container .changelog-footer {
+    margin-top: 8px;
+    font-size: x-small;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    color: var(--text-muted);
+}
+
+.jira-issue-container .changelog-footer button {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+    box-shadow: none;
+    height: 1.5em;
+    max-height: fit-content;
+    cursor: pointer;
+    font-size: x-small;
+    vertical-align: middle;
+    margin-left: 3px;
+}
+
+.jira-issue-container .changelog-footer button:hover {
+    opacity: 0.8;
+}
+
+.jira-issue-container .changelog-footer button > svg {
+    height: 1.5em;
+    width: 1.5em;
+    fill: none;
+    stroke: currentColor;
+}
+
+/* Empty State */
+.jira-issue-container .changelog-empty-state {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-muted);
+}
+
+.jira-issue-container .changelog-empty-message {
+    font-size: 1.1em;
+}
+
+.jira-issue-container .changelog-empty-period {
+    font-size: 0.9em;
+}
+
+/* Changelog swimlanes */
+.jira-issue-container .changelog-grouped {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.jira-issue-container .changelog-swimlane {
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.jira-issue-container .changelog-swimlane-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--background-secondary);
+    cursor: pointer;
+    user-select: none;
+}
+
+.jira-issue-container .changelog-swimlane-header:hover {
+    background: var(--background-secondary-alt);
+}
+
+.jira-issue-container .changelog-swimlane-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+}
+
+.jira-issue-container .changelog-swimlane-toggle svg {
+    width: 14px;
+    height: 14px;
+}
+
+.jira-issue-container .changelog-swimlane-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.jira-issue-container .changelog-swimlane-title {
+    font-weight: 500;
+    flex-grow: 1;
+}
+
+.jira-issue-container .changelog-swimlane-issue-link {
+    color: var(--text-accent);
+    text-decoration: none;
+}
+
+.jira-issue-container .changelog-swimlane-issue-link:hover {
+    text-decoration: underline;
+}
+
+.jira-issue-container .changelog-swimlane-count {
+    font-size: 0.85em;
+    color: var(--text-muted);
+    background: var(--background-modifier-border);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.jira-issue-container .changelog-swimlane-content {
+    display: none;
+    padding: 8px;
+    background: var(--background-primary);
+}
+
+.jira-issue-container .changelog-swimlane.expanded > .changelog-swimlane-content {
+    display: block;
+}
+
+/* Nested swimlanes (for author+issue) */
+.jira-issue-container .changelog-swimlane-nested {
+    margin: 4px 0;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.jira-issue-container .changelog-swimlane-nested > .changelog-swimlane-header {
+    padding: 6px 10px;
+    background: var(--background-primary-alt);
+}
+
+.jira-issue-container .changelog-swimlane-nested > .changelog-swimlane-content {
+    padding: 4px;
+}
+
+.jira-issue-container .changelog-swimlane-nested.expanded > .changelog-swimlane-content {
+    display: block;
+}
+
+/* Mini table for swimlanes */
+.jira-issue-container .changelog-mini-table {
+    font-size: 0.9em;
+}
+
+.jira-issue-container .changelog-mini-table th,
+.jira-issue-container .changelog-mini-table td {
+    padding: 4px 8px;
+}
+
+/* Issue type icon in swimlane header */
+.jira-issue-container .changelog-swimlane-type-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* Summary text in swimlane header */
+.jira-issue-container .changelog-swimlane-summary {
+    color: var(--text-muted);
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

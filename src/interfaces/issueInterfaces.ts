@@ -12,7 +12,29 @@ export interface IJiraChangelogItem {
 export interface IJiraChangelogHistory {
     id: string
     created: string
+    author?: IJiraUser
     items: IJiraChangelogItem[]
+}
+
+/**
+ * Flattened changelog entry for table display
+ * Combines issue info with individual changelog item
+ */
+export interface IChangelogEntry {
+    issueKey: string
+    issueAccount: IJiraIssueAccountSettings
+    issueSummary: string
+    issueTypeIcon: string
+    issueTypeName: string
+    timestamp: Date
+    created: string
+    field: string
+    fieldtype: string
+    from: string | null
+    fromString: string | null
+    to: string | null
+    toString: string | null
+    author?: IJiraUser
 }
 
 export interface IJiraChangelog {

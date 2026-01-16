@@ -3,6 +3,7 @@ import { JiraIssueSettingTab } from './settings'
 import JiraClient from './client/jiraClient'
 import ObjectsCache from './objectsCache'
 import { ColumnsSuggest } from './suggestions/columnsSuggest'
+import { ChangelogFenceRenderer } from './rendering/changelogFenceRenderer'
 import { CountFenceRenderer } from './rendering/countFenceRenderer'
 import { InlineIssueRenderer } from './rendering/inlineIssueRenderer'
 import { IssueFenceRenderer } from './rendering/issueFenceRenderer'
@@ -40,6 +41,7 @@ export default class JiraIssuePlugin extends Plugin {
         this.registerMarkdownCodeBlockProcessor('jira-search', SearchFenceRenderer)
         this.registerMarkdownCodeBlockProcessor('jira-count', CountFenceRenderer)
         this.registerMarkdownCodeBlockProcessor('jira-kanban', KanbanFenceRenderer)
+        this.registerMarkdownCodeBlockProcessor('jira-changelog', ChangelogFenceRenderer)
         // Suggestion menu for columns inside jira-search fence
         this.app.workspace.onLayoutReady(() => {
             this._columnsSuggest = new ColumnsSuggest(this.app)
@@ -101,6 +103,13 @@ export default class JiraIssuePlugin extends Plugin {
             name: 'Insert kanban template',
             editorCallback: (editor: Editor, view: MarkdownView) => {
                 editor.replaceRange('```jira-kanban\nquery: project = MYPROJ AND sprint in openSprints()\n\ncolumn: To Do\n  statuses: Open, To Do, Backlog\n\ncolumn: In Progress\n  statuses: In Progress, In Review\n\ncolumn: Done\n  statuses: Done, Closed\n\nfields: KEY, SUMMARY, TYPE, PRIORITY, ASSIGNEE\n```', editor.getCursor())
+            }
+        })
+        this.addCommand({
+            id: 'obsidian-jira-changelog-template-fence',
+            name: 'Insert changelog template',
+            editorCallback: (editor: Editor, view: MarkdownView) => {
+                editor.replaceRange('```jira-changelog\nquery: project = MYPROJ AND updated >= -1d\nlimit: 50\nperiod: 24h\n```', editor.getCursor())
             }
         })
     }
