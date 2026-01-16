@@ -365,9 +365,10 @@ export default {
         return issue
     },
 
-    async getSearchResults(query: string, options: { limit?: number, offset?: number, fields?: string[], account?: IJiraIssueAccountSettings } = {}): Promise<IJiraSearchResults> {
+    async getSearchResults(query: string, options: { limit?: number, offset?: number, fields?: string[], expand?: string[], account?: IJiraIssueAccountSettings } = {}): Promise<IJiraSearchResults> {
         const opt = {
             fields: options.fields || ['*all'],
+            expand: options.expand || [],
             offset: options.offset || 0,
             limit: options.limit || 50,
             account: options.account || null,
@@ -375,12 +376,14 @@ export default {
         const queryParameters = new URLSearchParams({
             jql: query,
             fields: opt.fields.join(','),
+            expand: opt.expand.length > 0 ? opt.expand.join(',') : '',
             startAt: opt.offset > 0 ? opt.offset.toString() : '',
             maxResults: opt.limit > 0 ? opt.limit.toString() : '',
         })
         const queryParameters2025 = new URLSearchParams({
             jql: query,
             fields: opt.fields.join(','),
+            expand: opt.expand.length > 0 ? opt.expand.join(',') : '',
             nextPageToken: opt.offset > 0 ? opt.offset.toString() : '',
             maxResults: opt.limit > 0 ? opt.limit.toString() : '',
         })

@@ -1,8 +1,31 @@
 import { IJiraIssueAccountSettings } from "./settingsInterfaces"
 
+export interface IJiraChangelogItem {
+    field: string
+    fieldtype: string
+    from: string | null
+    fromString: string | null
+    to: string | null
+    toString: string | null
+}
+
+export interface IJiraChangelogHistory {
+    id: string
+    created: string
+    items: IJiraChangelogItem[]
+}
+
+export interface IJiraChangelog {
+    startAt: number
+    maxResults: number
+    total: number
+    histories: IJiraChangelogHistory[]
+}
+
 export interface IJiraIssue {
     id: string
     key: string
+    changelog?: IJiraChangelog
     fields: {
         assignee: IJiraUser
         created: string

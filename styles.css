@@ -1294,6 +1294,12 @@ svg.svg-icon.jira-issue-hidden {
     padding: 2px 6px;
 }
 
+.ji-kanban-card-days-in-status {
+    font-size: 0.75em;
+    color: var(--text-muted);
+    margin-left: 6px;
+}
+
 /* Card Footer */
 .ji-kanban-card-footer {
     display: flex;

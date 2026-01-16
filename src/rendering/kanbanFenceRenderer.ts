@@ -112,6 +112,17 @@ function renderKanbanCard(
             title: issue.fields.status.description,
             parent: statusRow
         })
+
+        // Days in status
+        const days = getDaysInStatus(issue)
+        if (days !== null) {
+            createSpan({
+                cls: 'ji-kanban-card-days-in-status',
+                text: days === 0 ? 'today' : `${days}d`,
+                title: `In this status for ${days} day(s)`,
+                parent: statusRow
+            })
+        }
     }
 
     // Labels
@@ -162,6 +173,42 @@ function renderKanbanCard(
 
 function hasField(fields: ISearchColumn[], type: ESearchColumnsTypes): boolean {
     return fields.some(f => f.type === type)
+}
+
+/**
+ * Get the date when the issue last transitioned to its current status
+ */
+function getLastStatusChangeDate(issue: IJiraIssue): Date | null {
+    const changelog = issue.changelog
+    if (!changelog?.histories) return null
+
+    const currentStatus = issue.fields.status.name
+
+    // Search for the last transition TO the current status (histories are sorted newest first)
+    for (const history of changelog.histories) {
+        for (const item of history.items) {
+            if (item.field === 'status' && item.toString === currentStatus) {
+                return new Date(history.created)
+            }
+        }
+    }
+
+    // If no transition found, the issue was probably created in this status
+    return new Date(issue.fields.created)
+}
+
+/**
+ * Calculate the number of days the issue has been in its current status
+ */
+function getDaysInStatus(issue: IJiraIssue): number | null {
+    const changeDate = getLastStatusChangeDate(issue)
+    if (!changeDate) return null
+
+    const now = new Date()
+    const diffTime = now.getTime() - changeDate.getTime()
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+
+    return diffDays
 }
 
 /**
@@ -678,6 +725,7 @@ export const KanbanFenceRenderer = async (
             const limit = kanbanView.limit || SettingsData.searchResultsLimit
             JiraClient.getSearchResults(kanbanView.query, {
                 limit,
+                expand: ['changelog'],
                 account: kanbanView.account
             })
                 .then(searchResults => {
