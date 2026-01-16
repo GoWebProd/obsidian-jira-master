@@ -68,6 +68,8 @@ export const DEFAULT_ACCOUNT: IJiraIssueAccountSettings = {
     },
     predefinedLabels: [],
     predefinedAssignees: [],
+    peopleFieldMappings: [],
+    lastSelectedPeopleFields: [],
 }
 
 function deepCopy(obj: any): any {
@@ -111,6 +113,8 @@ export class JiraIssueSettingTab extends PluginSettingTab {
                         rateLimit: DEFAULT_RATE_LIMIT,
                         predefinedLabels: [],
                         predefinedAssignees: [],
+                        peopleFieldMappings: [],
+                        lastSelectedPeopleFields: [],
                     }
                 ]
             } else {
@@ -576,6 +580,80 @@ export class JiraIssueSettingTab extends PluginSettingTab {
 
                     button.setButtonText('Search')
                     button.setDisabled(false)
+                }))
+
+        // People Field Mappings section
+        containerEl.createEl('h3', { text: 'People Field Mappings' })
+        containerEl.createEl('p', {
+            text: 'Configure custom user fields for bulk assignment via "Assign to fields" context menu.',
+            cls: 'setting-item-description'
+        })
+
+        if (!newAccount.peopleFieldMappings) {
+            newAccount.peopleFieldMappings = []
+        }
+        for (let i = 0; i < newAccount.peopleFieldMappings.length; i++) {
+            const mapping = newAccount.peopleFieldMappings[i]
+            new Setting(containerEl)
+                .setName(mapping.displayName)
+                .setDesc(`Field ID: ${mapping.fieldId}`)
+                .addExtraButton(button => button
+                    .setIcon('trash')
+                    .setTooltip('Remove field mapping')
+                    .onClick(async () => {
+                        newAccount.peopleFieldMappings.splice(i, 1)
+                        // Also remove from lastSelectedPeopleFields if present
+                        if (newAccount.lastSelectedPeopleFields) {
+                            newAccount.lastSelectedPeopleFields = newAccount.lastSelectedPeopleFields.filter(
+                                id => id !== mapping.fieldId
+                            )
+                        }
+                        this.displayModifyAccountPage(prevAccount, newAccount)
+                    }))
+        }
+
+        // Add new mapping form
+        let newMappingName: TextComponent = null
+        let newMappingFieldId: TextComponent = null
+
+        new Setting(containerEl)
+            .setName('Display name')
+            .setDesc('Human-readable name (e.g., "Code Reviewer")')
+            .addText(text => {
+                newMappingName = text
+                text.setPlaceholder('Code Reviewer')
+            })
+
+        new Setting(containerEl)
+            .setName('Field ID')
+            .setDesc('Jira custom field ID (e.g., "customfield_10100")')
+            .addText(text => {
+                newMappingFieldId = text
+                text.setPlaceholder('customfield_10100')
+            })
+            .addButton(button => button
+                .setButtonText('Add')
+                .onClick(async () => {
+                    const displayName = newMappingName.getValue().trim()
+                    const fieldId = newMappingFieldId.getValue().trim()
+
+                    if (!displayName) {
+                        new Notice('Please enter a display name')
+                        return
+                    }
+                    if (!fieldId) {
+                        new Notice('Please enter a field ID')
+                        return
+                    }
+
+                    // Check for duplicate field ID
+                    if (newAccount.peopleFieldMappings.some(m => m.fieldId === fieldId)) {
+                        new Notice('This field ID is already mapped')
+                        return
+                    }
+
+                    newAccount.peopleFieldMappings.push({ displayName, fieldId })
+                    this.displayModifyAccountPage(prevAccount, newAccount)
                 }))
 
         new Setting(containerEl)

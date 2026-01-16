@@ -730,4 +730,35 @@ export default {
         )
         return response as IJiraUser
     },
+
+    async updateIssuePeopleFields(
+        issueKey: string,
+        fieldUpdates: Record<string, string | null>,
+        options: { account?: IJiraIssueAccountSettings } = {}
+    ): Promise<void> {
+        const fields: Record<string, Record<string, string> | null> = {}
+
+        for (const [fieldId, userNameOrAccountId] of Object.entries(fieldUpdates)) {
+            if (userNameOrAccountId === null) {
+                fields[fieldId] = null
+            } else {
+                // Jira Server uses "name", Jira Cloud uses "accountId"
+                // Same detection logic as updateIssueAssignee
+                if (userNameOrAccountId.includes('@') || !userNameOrAccountId.match(/^[0-9a-f]{24}$/)) {
+                    fields[fieldId] = { name: userNameOrAccountId }
+                } else {
+                    fields[fieldId] = { accountId: userNameOrAccountId }
+                }
+            }
+        }
+
+        const body = { fields }
+        console.log('JiraIssue: updateIssuePeopleFields request:', issueKey, JSON.stringify(body, null, 2))
+        await sendRequest({
+            method: 'PUT',
+            path: `/issue/${issueKey}`,
+            account: options.account || null,
+            body: body
+        })
+    },
 }

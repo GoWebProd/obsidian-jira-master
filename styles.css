@@ -1686,3 +1686,135 @@ svg.svg-icon.jira-issue-hidden {
     color: var(--text-muted);
     margin-top: 6px;
 }
+
+/* ===== People Fields Modal ===== */
+.jira-people-fields-modal {
+    max-width: 500px;
+}
+
+.jira-people-fields-modal h2 {
+    margin-bottom: 16px;
+}
+
+.jira-people-fields-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    margin: 12px 0 8px 0;
+}
+
+.jira-people-fields-checkbox-list {
+    max-height: 180px;
+    overflow-y: auto;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 6px;
+    padding: 4px;
+    margin-bottom: 8px;
+}
+
+.jira-people-fields-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.jira-people-fields-checkbox-item:hover {
+    background: var(--background-secondary);
+}
+
+.jira-people-fields-checkbox-item input[type="checkbox"] {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.jira-people-fields-field-info {
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+}
+
+.jira-people-fields-field-name {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.jira-people-fields-field-id {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.jira-people-fields-separator {
+    height: 1px;
+    background-color: var(--background-modifier-border);
+    margin: 12px 0;
+}
+
+.jira-people-fields-results {
+    max-height: 280px;
+    overflow-y: auto;
+    margin-bottom: 16px;
+}
+
+.jira-people-fields-user-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.jira-people-fields-user-item:hover {
+    background: var(--background-secondary);
+    border-color: var(--interactive-accent);
+}
+
+.jira-people-fields-user-item.is-selected {
+    background: rgba(14, 99, 156, 0.15);
+    border-color: var(--interactive-accent);
+}
+
+.jira-people-fields-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.jira-people-fields-avatar-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--background-modifier-border);
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.jira-people-fields-user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.jira-people-fields-user-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.jira-people-fields-user-email {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.jira-people-fields-loading {
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 12px;
+}

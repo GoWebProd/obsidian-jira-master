@@ -11,6 +11,11 @@ export interface IPredefinedAssignee {
     displayName: string    // Display name shown in UI
 }
 
+export interface IPeopleFieldMapping {
+    displayName: string    // Human-readable name (e.g., "Code Reviewer")
+    fieldId: string        // Jira field ID (e.g., "customfield_10100")
+}
+
 export enum EAuthenticationTypes {
     OPEN = 'OPEN',
     BASIC = 'BASIC',
@@ -85,6 +90,8 @@ export interface IJiraIssueAccountSettings {
     }
     predefinedLabels: string[]
     predefinedAssignees: IPredefinedAssignee[]
+    peopleFieldMappings: IPeopleFieldMapping[]
+    lastSelectedPeopleFields: string[]
 }
 
 export enum ESearchResultsRenderingTypes {

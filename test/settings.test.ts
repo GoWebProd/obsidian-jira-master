@@ -78,6 +78,8 @@ describe('Settings', () => {
                 rateLimit: DEFAULT_ACCOUNT.rateLimit,
                 predefinedLabels: DEFAULT_ACCOUNT.predefinedLabels,
                 predefinedAssignees: DEFAULT_ACCOUNT.predefinedAssignees,
+                peopleFieldMappings: DEFAULT_ACCOUNT.peopleFieldMappings,
+                lastSelectedPeopleFields: DEFAULT_ACCOUNT.lastSelectedPeopleFields,
                 "cache": {
                     "customFieldsIdToName": {},
                     "customFieldsNameToId": {},

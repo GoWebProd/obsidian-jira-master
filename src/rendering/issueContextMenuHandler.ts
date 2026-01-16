@@ -2,6 +2,7 @@ import { Menu } from "obsidian"
 import { IJiraIssue } from "../interfaces/issueInterfaces"
 import { AssigneeModal } from "../modals/assigneeModal"
 import { LabelManagementModal } from "../modals/labelManagementModal"
+import { PeopleFieldsModal } from "../modals/peopleFieldsModal"
 import { PriorityModal } from "../modals/priorityModal"
 
 /**
@@ -54,6 +55,17 @@ export function attachIssueContextMenuHandler(
                 new AssigneeModal(issue, onIssueUpdated).open()
             })
         )
+
+        // Only show if people field mappings are configured
+        if (issue.account?.peopleFieldMappings?.length > 0) {
+            menu.addItem(item => item
+                .setTitle('Assign to fields')
+                .setIcon('users')
+                .onClick(() => {
+                    new PeopleFieldsModal(issue, onIssueUpdated).open()
+                })
+            )
+        }
 
         menu.showAtMouseEvent(event)
     })
