@@ -12,7 +12,7 @@ Some of the plugin that are compatible with those API are:
 
 It is possible to access the API using the plugin reference
 ```js
-this.app.plugins.plugins['obsidian-jira-issue'].api
+this.app.plugins.plugins['obsidian-jira-master'].api
 ```
 
 or the global variable:

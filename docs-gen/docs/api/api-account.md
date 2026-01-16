@@ -10,7 +10,7 @@ sidebar_position: 6
 |-|-|-|-|-|
 | alias | True | `string` | - | Alias of the account defined in the plugin settings |
 
-Return value type: [`IJiraIssueAccountSettings`](https://github.com/marc0l92/obsidian-jira-issue/blob/master/src/interfaces/settingsInterfaces.ts#L47-L68)
+Return value type: [`IJiraIssueAccountSettings`](https://github.com/GoWebProd/obsidian-jira-master/blob/master/src/interfaces/settingsInterfaces.ts#L47-L68)
 
 ## getAccountByHost
 - `$ji.account.getAccountByHost(host: string)`
@@ -19,4 +19,4 @@ Return value type: [`IJiraIssueAccountSettings`](https://github.com/marc0l92/obs
 |-|-|-|-|-|
 | host | True | `string` | - | Host of the account defined in the plugin settings |
 
-Return value type: [`IJiraIssueAccountSettings`](https://github.com/marc0l92/obsidian-jira-issue/blob/master/src/interfaces/settingsInterfaces.ts#L47-L68)
+Return value type: [`IJiraIssueAccountSettings`](https://github.com/GoWebProd/obsidian-jira-master/blob/master/src/interfaces/settingsInterfaces.ts#L47-L68)

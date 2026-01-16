@@ -1,35 +1,33 @@
 # Obsidian jira-issue
-![Test Status](https://github.com/marc0l92/obsidian-jira-issue/actions/workflows/ci.yaml/badge.svg)
+![Test Status](https://github.com/GoWebProd/obsidian-jira-master/actions/workflows/ci.yaml/badge.svg)
 
 
 This plugin allows you to track the progress of [Atlassian Jira](https://www.atlassian.com/software/jira) issues from your [Obsidian.md](https://obsidian.md/) notes.
-
-<a href='https://ko-fi.com/marc0l92' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png' border='0' alt='Buy Me a Coffee'></a>
 
 ![issues](./assets/issues.png)
 
 ![searchResults](./assets/searchResults2.png)
 
 ## Documentation
-Check out the complete [documentation](https://marc0l92.github.io/obsidian-jira-issue) to start using Jira-Issue.
+Check out the complete [documentation](https://GoWebProd.github.io/obsidian-jira-master) to start using Jira-Issue.
 
 ## Installation
 From the obsidian app go in `Settings > Third-party plugins > Community Plugins > Browse` and search for `jira-issue`.
 
-[Read more...](https://marc0l92.github.io/obsidian-jira-issue/docs/get-started/installation)
+[Read more...](https://GoWebProd.github.io/obsidian-jira-master/docs/get-started/installation)
 
 ## Configuration
 
 Use the plugin options to configure the connection to your Atlassian Jira server: host, username and password.
 
-[Read more...](https://marc0l92.github.io/obsidian-jira-issue/docs/get-started/basic-authentication)
+[Read more...](https://GoWebProd.github.io/obsidian-jira-master/docs/get-started/basic-authentication)
 
 ## Markdown Syntax
 
 The plugin support the following components:
 
 ### 📃`jira-issue`:
-- [Documentation](https://marc0l92.github.io/obsidian-jira-issue/docs/components/jira-issue)
+- [Documentation](https://GoWebProd.github.io/obsidian-jira-master/docs/components/jira-issue)
 - Example:
 ````
 ```jira-issue
@@ -41,7 +39,7 @@ https://my.jira-server.com/browse/BBB-333
 ````
 
 ### 🔎`jira-search`
-- [Documentation](https://marc0l92.github.io/obsidian-jira-issue/docs/components/jira-search)
+- [Documentation](https://GoWebProd.github.io/obsidian-jira-master/docs/components/jira-search)
 - Simple example:
 ````
 ```jira-search
@@ -59,7 +57,7 @@ columns: KEY, SUMMARY, -ASSIGNEE, -REPORTER, STATUS, NOTES
 ````
 
 ### 🔢`jira-count`
-- [Documentation](https://marc0l92.github.io/obsidian-jira-issue/docs/components/jira-count)
+- [Documentation](https://GoWebProd.github.io/obsidian-jira-master/docs/components/jira-count)
 - Example:
 ````
 ```jira-count
@@ -68,7 +66,7 @@ project = REF AND status changed to (Done, "Won't Fix", Archived, "Can't Reprodu
 ````
 
 ### 📊`jira-kanban`
-- [Documentation](https://marc0l92.github.io/obsidian-jira-issue/docs/components/jira-kanban)
+- [Documentation](https://GoWebProd.github.io/obsidian-jira-master/docs/components/jira-kanban)
 - Simple example:
 ````
 ```jira-kanban
@@ -97,7 +95,7 @@ fields: [KEY, SUMMARY, PRIORITY, ASSIGNEE, LABELS]
 ````
 
 ### 📜`jira-changelog`
-- [Documentation](https://marc0l92.github.io/obsidian-jira-issue/docs/components/jira-changelog)
+- [Documentation](https://GoWebProd.github.io/obsidian-jira-master/docs/components/jira-changelog)
 - Simple example:
 ````
 ```jira-changelog
@@ -116,7 +114,7 @@ limit: 50
 ````
 
 ### 🏷️Inline issues
-- [Documentation](https://marc0l92.github.io/obsidian-jira-issue/docs/components/inline-issue)
+- [Documentation](https://GoWebProd.github.io/obsidian-jira-master/docs/components/inline-issue)
 - Example:
 ````
 With inline issue you can insert an issue like JIRA:OPEN-351 inside your text.
@@ -139,4 +137,4 @@ Pull requests are welcome.
 
 ## License
 
-Jira-Issue is licensed under the GNU AGPLv3 license. Refer to [LICENSE](https://github.com/marc0l92/obsidian-jira-issue/blob/master/LICENSE) for more information.
+Jira-Issue is licensed under the GNU AGPLv3 license. Refer to [LICENSE](https://github.com/GoWebProd/obsidian-jira-master/blob/master/LICENSE) for more information.

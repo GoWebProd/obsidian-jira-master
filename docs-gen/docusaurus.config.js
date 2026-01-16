@@ -8,17 +8,17 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 const config = {
   title: 'Obsidian Jira Issue',
   tagline: 'Track the progress of Atlassian Jira issues from your Obsidian notes',
-  url: 'https://marc0l92.github.io',
+  url: 'https://GoWebProd.github.io',
   trailingSlash: false,
-  baseUrl: '/obsidian-jira-issue/',
+  baseUrl: '/obsidian-jira-master/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   // favicon: 'img/favicon.ico',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'marc0l92', // Usually your GitHub org/user name.
-  projectName: 'obsidian-jira-issue', // Usually your repo name.
+  organizationName: 'GoWebProd', // Usually your GitHub org/user name.
+  projectName: 'obsidian-jira-master', // Usually your repo name.
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -49,7 +49,7 @@ const config = {
       navbar: {
         title: 'Obsidian Jira Issue',
         // logo: {
-        //   alt: 'obsidian-jira-issue',
+        //   alt: 'obsidian-jira-master',
         //   src: 'img/logo.svg',
         // },
         items: [
@@ -78,12 +78,7 @@ const config = {
             label: 'API',
           },
           {
-            href: 'https://ko-fi.com/marc0l92',
-            label: 'Buy me a coffee',
-            position: 'right',
-          },
-          {
-            href: 'https://github.com/marc0l92/obsidian-jira-issue',
+            href: 'https://github.com/GoWebProd/obsidian-jira-master',
             label: 'GitHub',
             position: 'right',
           },
@@ -115,7 +110,7 @@ const config = {
         //     ],
         //   },
         // ],
-        copyright: `Copyright © ${new Date().getFullYear()} obsidian-jira-issue. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} obsidian-jira-master. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,

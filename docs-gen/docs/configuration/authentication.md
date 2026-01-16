@@ -244,7 +244,7 @@ Click the "✕" button next to any mapping to remove it. This only removes the c
 The credentials are stored in clear in the configuration file of this plugin.
 The configuration file is located at:
 ```
-<your vault>/.obsidian/plugins/obsidian-jira-issue/data.json
+<your vault>/.obsidian/plugins/obsidian-jira-master/data.json
 ```
 
 Pay attention when you synchronize the notes across devices because the credentials may be copied as well.

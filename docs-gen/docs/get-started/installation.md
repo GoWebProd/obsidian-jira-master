@@ -18,7 +18,7 @@ The installation of the plugin is standard and it is the same as all the other c
 
 ## Manual installation
 
-- Access the [GitHub releases page](https://github.com/marc0l92/obsidian-jira-issue/releases)
+- Access the [GitHub releases page](https://github.com/GoWebProd/obsidian-jira-master/releases)
 - Download from the last release the 3 files:
     - `main.js`
     - `manifest.json`
@@ -26,5 +26,5 @@ The installation of the plugin is standard and it is the same as all the other c
 - Access to the folder of your Obsidian.md vault
 - Browse to the folder `.obsidian\plugins`
     - This folder may be hidden in some operating systems
-- Create the folder `obsidian-jira-issue`
-- Move the 3 downloaded files in the folder `obsidian-jira-issue`
+- Create the folder `obsidian-jira-master`
+- Move the 3 downloaded files in the folder `obsidian-jira-master`
